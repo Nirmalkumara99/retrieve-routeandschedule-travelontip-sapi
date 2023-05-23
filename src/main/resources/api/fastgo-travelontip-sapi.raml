@@ -1,0 +1,81 @@
+#%RAML 1.0
+title: Fastgo-TravelonTip-SAPI
+description: Fastgo SAPI for routes and loaction schedules
+
+uses:
+  header: libraries/common/common-library.raml
+types:
+  common-error: !include /libraries/common/datatype/common-errortype.raml
+  getRouteDataType: !include /libraries/routes/datatype/getRoutes-dataType.raml
+  getScheduleDatatype: !include /libraries/schedule/datatype/getSchedule-dataType.raml
+/{transportType}:
+  /{transportCompany}:
+    /routes:
+      get:
+        is:
+          - header.transactionId
+        responses:
+          200:
+            body:
+              application/json:
+                type: getRouteDataType
+                example: !include /libraries/routes/example/getRoute-success.json
+                    
+          400:
+            body:
+              application/json:
+                type: common-error
+                example: !include /libraries/common/example/400.json
+                  
+          404:
+            body:
+              application/json:
+                type: common-error
+                example: !include /libraries/common/example/404.json
+                  
+          500:
+            body:
+              application/json:
+                type: common-error
+                example: !include /libraries/common/example/500.json
+                  
+    /schedules:
+      get:
+        headers:
+          transactionId:
+            type: string
+            required: true
+            example: "hdsfhjdh-jxbv859-sjdf7643-3746bbd"
+        queryParameters:
+          departureLocationCode:
+            required: false
+            type: string
+            example: "BEN-SG"
+          destinationLocationCode:
+            required: false
+            type: string
+            example: "KLG-MY"
+        responses:
+          200:
+            body:
+              application/json:
+                type: getScheduleDatatype
+                example: !include /libraries/schedule/example/getSchedule-success.json
+                                        
+          400:
+            body:
+              application/json:
+                type: common-error
+                example: !include /libraries/common/example/400.json
+                  
+          404:
+            body:
+              application/json:
+                type: common-error
+                example: !include /libraries/common/example/404.json
+                  
+          500:
+            body:
+              application/json:
+                type: common-error
+                example: !include /libraries/common/example/500.json
